@@ -72,10 +72,21 @@ prompt_segment() {
   [[ -n $3 ]] && echo -n $3
 }
 
+# # End the prompt, closing any open segments - ORIGINAL
+# prompt_end() {
+#   if [[ -n $CURRENT_BG ]]; then
+#     echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+#   else
+#     echo -n "%{%k%}"
+#   fi
+#   echo -n "%{%f%}"
+#   CURRENT_BG=''
+# }
+
 # End the prompt, closing any open segments
 prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
-    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR\n$(date) $SEGMENT_SEPARATOR"
   else
     echo -n "%{%k%}"
   fi
@@ -102,7 +113,8 @@ prompt_git() {
   local PL_BRANCH_CHAR
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    PL_BRANCH_CHAR=$'\ue0a0'         # 
+    #original PL_BRANCH_CHAR=$'\ue0a0'         # 
+    PL_BRANCH_CHAR=$'git \ue0a0'         # added by manu
   }
   local ref dirty mode repo_path
 
@@ -204,7 +216,9 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue $CURRENT_FG '%~'
+ prompt_segment blue $CURRENT_FG '%~'
+#  prompt_segment blue $CURRENT_FG "${PWD##*/}"
+#  prompt_segment cyan black "${PWD##*/}"
 }
 
 # Virtualenv: current working virtualenv
